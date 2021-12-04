@@ -1,39 +1,61 @@
-import Data.List
+import Text.ParserCombinators.ReadP
+import Control.Applicative
+import Data.Char
 
 sample_data = ["forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"]
 
--- part 1
+-- Parser --
+-- Using the Text.ParserCombinators.ReadP library
+-- I'm going to make a basic parser for the instructions
 
-type Direction = String
-type Pinstruction = (Direction, Int)
+-- We first make a record type for holding Instructions
+data Instruction = Instruction
+    { dir :: String
+    , value :: Int
+    }
+    deriving Show
 
-parseInstruction :: String -> Pinstruction
-parseInstruction s = (a, read b) where
-   a:b:_ = words s
+digit :: ReadP Char
+digit = satisfy isDigit
 
-filterInstructions :: String -> [Pinstruction] -> [Pinstruction]
-filterInstructions s ps = filter (checkDirection s) ps
+numbers :: Int -> ReadP Int
+numbers digits = 
+    fmap read (count digits digit)
 
-checkDirection :: String -> Pinstruction -> Bool
-checkDirection s' i = s' == s where
-  (s, n) = i
+-- Since parser combinators are monads, we can correct the sign
+-- of the value (i.e. set "up"s to negative values) while we are
+-- parsing using this function
+correctSign :: String -> Int -> Int
+correctSign "up" n = -n
+correctSign _ n = n
 
-getValue :: Pinstruction -> Int
-getValue (s,i) = i
+-- This is our parser for the Instructions
+-- It takes us from Strings to Instructions.
+instruction :: ReadP Instruction
+instruction = do
+    dir <- string "forward" <|> string "up" <|> string "down"
+    string " "
+    value <- numbers 1
+    return (Instruction dir (correctSign dir value))
+
+-- Since the result of mapping our parser over the data is of type
+-- [[(Instruction, String)]], we need to pull out the successful 
+-- Instruction data
+getInstructions :: [String] -> [Instruction]
+getInstructions ss = map (fst . head) (map (readP_to_S instruction) ss)
+
+isDirection :: String -> Instruction -> Bool
+isDirection s i = dir i == s
+
+sumVals :: [Instruction] -> Int
+sumVals = sum . map value
 
 part1 :: [String] -> Int
-part1 is = f * (d - u) where
-  parsed = map parseInstruction is
-  f = sum $ map getValue $ filterInstructions "forward" parsed
-  d = sum $ map getValue $ filterInstructions "down" parsed
-  u = sum $ map getValue $ filterInstructions "up" parsed
+part1 ss = f * (d + u) where
+  is = getInstructions ss
+  f = sumVals $ filter (isDirection "forward") is
+  d = sumVals $ filter (isDirection "down") is
+  u = sumVals $ filter (isDirection "up") is
 
-
-
-
-
-
-
--- main
 main :: IO ()
-main = interact $ show . part1 . lines
+main = interact $ show . part1 . lines 
