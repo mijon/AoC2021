@@ -14,3 +14,4 @@ I'm going to be doing most problems in R, but I'm hoping to also throw in some H
 |   3 | [⭐⭐](./R/day_3.R) |                         |
 |   4 | [⭐⭐](./R/day_4.R) |                         |
 |   5 | [⭐⭐](./R/day_5.R) |                         |
+|   6 | [⭐⭐](./R/day_6.R) |                         |
