@@ -1,5 +1,7 @@
 library(tidyverse)
 
+# ---- part 1 ----
+
 read_day6 <- function(path) {
   path %>%
     read_file() %>%
@@ -10,19 +12,12 @@ read_day6 <- function(path) {
     count()
 }
 
-next_generation_old <- function(generation) {
+next_generation <- function(generation) {
   generation %>%
     mutate(age = map(age, step_generation)) %>%
     unnest_longer(age) %>%
     group_by(age) %>%
     summarise(n = sum(n))
-}
-
-next_generation_old <- function(generation) {
-  generation %>%
-    mutate(age = map(age, step_generation)) %>%
-    unnest_longer(age) %>%
-    count(age)
 }
 
 step_generation <- function(x) {
