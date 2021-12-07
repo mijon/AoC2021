@@ -26,7 +26,11 @@ part2 <- function(path) {
   
   # because we're dealing with the mean, it's likely that we'll be getting a
   # non-integer. Since the crabs have to go in integer steps, we need to try
-  # both and take the minimum distance.
+  # both and take the minimum distance. Unlike the previous result, I didn't
+  # know this one already, (one probably could have figured it out by noticing
+  # that the fuel consumption is quadratic in the distance and noticed that
+  # something that minimises squared distance is the mean), but I figured it out
+  # using differention and some paper (not included).
   ms <- c(floor(mean(crabs)), ceiling(mean(crabs)))
   
   check_fuel <- function(m) {
