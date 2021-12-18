@@ -20,3 +20,4 @@ I'm going to be doing most problems in R, but I'm hoping to also throw in some H
 |    9 |  [⭐⭐](./R/day_9.R) |                         |
 |   10 | [⭐⭐](./R/day_10.R) |                         |
 |   11 | [⭐⭐](./R/day_11.R) |                         |
+|   12 | [⭐⭐](./R/day_12.R) |                         |
