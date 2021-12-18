@@ -98,4 +98,4 @@ part2 <- function(path) {
 }
 
 
-part2("data/12.txt") # 
+part2("data/12.txt") # 98441   but this solution is really slow
